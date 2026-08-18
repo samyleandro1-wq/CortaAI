@@ -3,65 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORTA AI - Gerador de Cortes Grátis</title>
+    <title>CORTA AI - Gere 10 Cortes Virais</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
 </head>
-<body class="bg-[#0a0a0a] text-white flex items-center justify-center min-h-screen">
-    <div class="text-center">
-        <h1 class="text-4xl font-bold text-cyan-400 mb-4">⚡ CORTA AI</h1>
-        <p class="mb-8">Transforme vídeos longos em 10 cortes virais em 1 minuto</p>
+<body class="bg-[#0a0a0a] text-white">
+    <div class="min-h-screen flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-900 via-[#0a0a0a] to-cyan-900">
         
-        <div class="bg-[#1a1a2e] p-8 rounded-2xl">
-            <h2 class="text-2xl font-bold mb-2">Gerador de Cortes GRÁTIS</h2>
-            <p class="mb-6">Cole o link do YouTube e receba 10 ideias de cortes</p>
-            <input type="text" placeholder="https://youtube.com/watch?v=..." 
-                   class="w-full p-3 rounded-lg bg-[#0a0a0a] border border-cyan-400 mb-4">
-            <button class="bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg">
-                GERAR 10 CORTES AGORA
-            </button>
+        <div class="text-center mb-8">
+            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                CORTA AI
+            </h1>
+            <p class="text-xl md:text-2xl mt-2 text-gray-300">Transforme 1 vídeo longo em 10 cortes virais</p>
         </div>
+
+        <div class="w-full max-w-2xl bg-[#1a1a2e] p-8 rounded-2xl shadow-2xl border border-purple-500/30">
+            <label class="block text-sm font-bold mb-2">Cole o link do YouTube aqui:</label>
+            <input type="text" id="youtubeLink" placeholder="https://youtube.com/watch?v=..." 
+                   class="w-full p-4 bg-[#0a0a0a] border-2 border-gray-700 rounded-lg focus:border-cyan-400 outline-none mb-4">
+            
+            <button id="gerarBtn" onclick="gerarCortes()"
+                    class="w-full bg-gradient-to-r from-purple-600 to-cyan-600 p-4 rounded-lg font-bold text-lg hover:scale-105 transition-transform">
+                Gerar 10 Cortes Virais
+            </button>
+
+            <div id="loading" class="hidden text-center mt-6">
+                <p class="text-cyan-400">🧠 IA assistindo seu vídeo... isso leva 1-2 min</p>
+            </div>
+
+            <div id="resultados" class="mt-8 text-left"></div>
+        </div>
+
+        <p class="text-gray-500 text-sm mt-8">Feito com IA • R$9,90/mês ilimitado</p>
     </div>
-</body>
-</html>
+
 <script>
-function gerarCortes() {
-    const link = document.querySelector('input').value;
-    if(!link) {
-        alert('Cola um link do YouTube primeiro!');
+// COLE SUA URL DO N8N AQUI EMBAIXO
+const WEBHOOK_URL = "https://SEU-N8N.app.n8n.cloud/webhook/A3I05BpLL7Vk0AG9";
+
+async function gerarCortes() {
+    const link = document.getElementById('youtubeLink').value;
+    const btn = document.getElementById('gerarBtn');
+    const loading = document.getElementById('loading');
+    const resultados = document.getElementById('resultados');
+    
+    if(!link || !link.includes('youtube')) {
+        alert('Cola um link do YouTube válido!');
         return;
     }
     
-    const container = document.querySelector('.bg-\\[\\#1a1a2e\\]');
-    container.innerHTML += `
-        <div id="resultados" class="mt-8 text-left">
-            <h3 class="text-xl font-bold mb-4 text-cyan-400">⚡ 10 Ideias de Cortes Virais:</h3>
-            
-            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
-                <p class="font-bold">1. O Segredo que ninguém te conta</p>
-                <p class="text-sm text-gray-400">00:01:23 - 00:01:45 | Gancho: "Presta atenção nisso..."</p>
-            </div>
-            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
-                <p class="font-bold">2. O Erro que está te travando</p>
-                <p class="text-sm text-gray-400">00:03:10 - 00:03:32 | Gancho: "Você está fazendo errado"</p>
-            </div>
-            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
-                <p class="font-bold">3. A Técnica de R$10 mil</p>
-                <p class="text-sm text-gray-400">00:05:44 - 00:06:05 | Gancho: "Nunca vi ninguém fazer isso"</p>
-            </div>
-            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
-                <p class="font-bold">4. O que eu faria diferente</p>
-                <p class="text-sm text-gray-400">00:07:21 - 00:07:50 | Gancho: "Se eu pudesse voltar no tempo..."</p>
-            </div>
-            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
-                <p class="font-bold">5. A Verdade dura</p>
-                <p class="text-sm text-gray-400">00:09:15 - 00:09:40 | Gancho: "Vou ser sincero com você"</p>
-            </div>
-            
-            <p class="text-center text-sm text-gray-500 mt-4">+ 5 cortes gerados. Isso é uma demo. Quer a IA real me chama!</p>
-        </div>
-    `;
+    btn.disabled = true;
+    btn.innerText = 'Processando...';
+    loading.classList.remove('hidden');
+    resultados.innerHTML = '';
+    
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({youtube_url: link})
+        });
+        
+        if(!response.ok) throw new Error('Erro no n8n');
+        
+        const data = await response.json();
+        
+        let html = `<h3 class="text-2xl font-bold mb-4 text-cyan-400">⚡ 10 Cortes Encontrados:</h3>`;
+        data.cortes.forEach((corte, i) => {
+            html += `
+            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3 border border-gray-700">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="font-bold text-lg">${i+1}. ${corte.titulo}</p>
+                        <p class="text-sm text-cyan-400 font-bold">${corte.minutagem}</p>
+                        <p class="text-sm text-gray-400 mt-1">Gancho: "${corte.gancho}"</p>
+                    </div>
+                    <button onclick="copiar('${corte.minutagem} - ${corte.titulo}')" 
+                            class="text-xs bg-purple-600 px-3 py-1 rounded hover:bg-purple-500">Copiar</button>
+                </div>
+            </div>`;
+        });
+        
+        resultados.innerHTML = html;
+        
+    } catch (error) {
+        resultados.innerHTML = `<p class="text-red-400 text-center">Deu erro 😭 Confere se o n8n tá online e a URL tá certa.</p>`;
+    }
+    
+    btn.disabled = false;
+    btn.innerText = 'Gerar 10 Cortes Virais';
+    loading.classList.add('hidden');
 }
 
-// Faz o botão chamar a função
-document.querySelector('button').onclick = gerarCortes;
+function copiar(texto) {
+    navigator.clipboard.writeText(texto);
+    alert('Copiado!');
+}
 </script>
+
+</body>
+</html>
