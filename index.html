@@ -1,44 +1,78 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORTA AI - Gere 10 Cortes Virais</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
-        body { font-family: 'Poppins', sans-serif; }
-        .loader {
-            border: 4px solid #1a1a2e;
-            border-top: 4px solid #06b6d4;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corta AI - Gerador de Cortes</title>
+<style>
+  body{background:#0a0a0a;color:#fff;font-family:Arial;padding:40px;text-align:center;}
+  h1{color:#00ff88;font-size:32px;}
+  .cartao{background:#1a1a1a;padding:30px;border-radius:12px;margin:30px auto;max-width:600px;}
+  input{padding:14px; width:90%; max-width:500px; margin:15px 0; border-radius:8px; border:2px solid #00ff88; background:#111; color:white; font-size:16px;}
+  button{padding:16px 32px; background:#00ff88; color:#000; font-weight:bold; border:none; border-radius:8px; cursor:pointer; font-size:18px; margin:10px;}
+  button:disabled{background:#555; cursor:not-allowed;}
+  #resultado{background:#222; padding:15px; border-radius:8px; margin-top:20px; text-align:left; display:none;}
+  .corte-item{background:#333; padding:10px; margin:8px 0; border-radius:6px; border-left:3px solid #00ff88;}
+</style>
 </head>
-<body class="bg-[#0a0a0a] text-white">
-    <div class="min-h-screen flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-900 via-[#0a0a0a] to-cyan-900">
-        
-        <div class="text-center mb-8">
-            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                CORTA AI
-            </h1>
-            <p class="text-xl md:text-2xl mt-2 text-gray-300">Transforme 1 vídeo longo em 10 cortes virais</p>
-        </div>
+<body>
 
-        <div class="w-full max-w-2xl bg-[#1a1a2e] p-8 rounded-2xl shadow-2xl border-purple-500/30">
-            <label class="block text-sm font-bold mb-2">Cole o link do YouTube aqui:</label>
-            <input type="text" id="youtubeLink" placeholder="https://youtube.com/watch?v=..." 
-                   class="w-full p-4 bg-[#0a0a0a] border-2 border-gray-700 rounded-lg focus:border-cyan-400 outline-none mb-4">
-            
-            <button id="gerarBtn" onclick="gerarCortes()"
-                    class="w-full bg-gradient-to-r from-purple-600 to-cyan-600 p-4 rounded-lg font-bold text-lg hover:scale-105 transition-transform disabled:opacity-50">
-                Gerar 10 Cortes Virais
-            </button>
+<h1> CORTA AI</h1>
+<p>Transforme vídeos longos em 10 cortes virais em 1 minuto</p>
 
-            <div id="loading" class="hidden text-center mt-6">
-                <div class
+<div class="cartao">
+  <h2>Gerador de Cortes GRÁTIS</h2>
+  <p>Cole o link do YouTube e receba 10 ideias de cortes</p>
+  
+  <input id="input-youtube" placeholder="https://youtube.com/watch?v=..." />
+  <br>
+  <button id="btn-gerar">GERAR 10 CORTES AGORA</button>
+  
+  <div id="resultado">
+    <h3>Seus 10 Cortes:</h3>
+    <div id="lista-cortes"></div>
+  </div>
+</div>
+
+<script>
+document.getElementById("btn-gerar").addEventListener("click", async () => {
+  const link = document.getElementById("input-youtube").value
+  if(!link) return alert("Cola um link do YouTube primeiro")
+  if(!link.includes("youtube") && !link.includes("youtu.be")) return alert("Isso não é um link do YouTube")
+
+  document.getElementById("btn-gerar").innerText = "Gerando cortes... aguarde 1 min"
+  document.getElementById("btn-gerar").disabled = true
+  document.getElementById("resultado").style.display = "none"
+
+  try {
+    const res = await fetch("https://caiqueluk.app.n8n.cloud/webhook/cortai", {
+      method: "POST", 
+      headers: {"Content-Type": "application/json"}, 
+      body: JSON.stringify({ youtube_url: link })
+    })
+    
+    const cortes = await res.json()
+    console.log("CORTES:", cortes) 
+
+    // Mostra na tela
+    const lista = document.getElementById("lista-cortes")
+    lista.innerHTML = ""
+    cortes.forEach((c, i) => {
+      lista.innerHTML += `<div class="corte-item"><b>Corte ${i+1}:</b> ${c.titulo || c}</div>`
+    })
+    
+    document.getElementById("resultado").style.display = "block"
+    alert("Pronto! Seus 10 cortes apareceram aí embaixo")
+    
+  } catch(e) {
+    alert("Deu erro. Verifica se o n8n tá ativo")
+    console.log(e)
+  }
+
+  document.getElementById("btn-gerar").innerText = "GERAR 10 CORTES AGORA"
+  document.getElementById("btn-gerar").disabled = false
+})
+</script>
+
+</body>
+</html>
