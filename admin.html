@@ -38,7 +38,6 @@
 document.getElementById("btn-gerar").addEventListener("click", async () => {
   const link = document.getElementById("input-youtube").value
   if(!link) return alert("Cola um link do YouTube primeiro")
-  if(!link.includes("youtube") && !link.includes("youtu.be")) return alert("Isso não é um link do YouTube")
 
   document.getElementById("btn-gerar").innerText = "Gerando cortes... aguarde 1 min"
   document.getElementById("btn-gerar").disabled = true
@@ -52,7 +51,6 @@ document.getElementById("btn-gerar").addEventListener("click", async () => {
     })
     
     const cortes = await res.json()
-    console.log("CORTES:", cortes) 
 
     const lista = document.getElementById("lista-cortes")
     lista.innerHTML = ""
@@ -61,17 +59,14 @@ document.getElementById("btn-gerar").addEventListener("click", async () => {
     })
     
     document.getElementById("resultado").style.display = "block"
-    alert("Pronto! Seus 10 cortes apareceram aí embaixo")
     
   } catch(e) {
     alert("Deu erro. Verifica se o n8n tá ativo")
-    console.log(e)
   }
 
   document.getElementById("btn-gerar").innerText = "GERAR 10 CORTES AGORA"
   document.getElementById("btn-gerar").disabled = false
 })
 </script>
-
 </body>
 </html>
