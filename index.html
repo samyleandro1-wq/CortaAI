@@ -1,78 +1,42 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Corta AI - Gerador de Cortes</title>
-<style>
-  body{background:#0a0a0a;color:#fff;font-family:Arial;padding:40px;text-align:center;}
-  h1{color:#00ff88;font-size:32px;}
-  .cartao{background:#1a1a1a;padding:30px;border-radius:12px;margin:30px auto;max-width:600px;}
-  input{padding:14px; width:90%; max-width:500px; margin:15px 0; border-radius:8px; border:2px solid #00ff88; background:#111; color:white; font-size:16px;}
-  button{padding:16px 32px; background:#00ff88; color:#000; font-weight:bold; border:none; border-radius:8px; cursor:pointer; font-size:18px; margin:10px;}
-  button:disabled{background:#555; cursor:not-allowed;}
-  #resultado{background:#222; padding:15px; border-radius:8px; margin-top:20px; text-align:left; display:none;}
-  .corte-item{background:#333; padding:10px; margin:8px 0; border-radius:6px; border-left:3px solid #00ff88;}
-</style>
-</head>
-<body>
-
-<h1> CORTA AI</h1>
-<p>Transforme vídeos longos em 10 cortes virais em 1 minuto</p>
-
-<div class="cartao">
-  <h2>Gerador de Cortes GRÁTIS</h2>
-  <p>Cole o link do YouTube e receba 10 ideias de cortes</p>
-  
-  <input id="input-youtube" placeholder="https://youtube.com/watch?v=..." />
-  <br>
-  <button id="btn-gerar">GERAR 10 CORTES AGORA</button>
-  
-  <div id="resultado">
-    <h3>Seus 10 Cortes:</h3>
-    <div id="lista-cortes"></div>
-  </div>
-</div>
-
 <script>
-document.getElementById("btn-gerar").addEventListener("click", async () => {
-  const link = document.getElementById("input-youtube").value
-  if(!link) return alert("Cola um link do YouTube primeiro")
-  if(!link.includes("youtube") && !link.includes("youtu.be")) return alert("Isso não é um link do YouTube")
-
-  document.getElementById("btn-gerar").innerText = "Gerando cortes... aguarde 1 min"
-  document.getElementById("btn-gerar").disabled = true
-  document.getElementById("resultado").style.display = "none"
-
-  try {
-    const res = await fetch("https://caiqueluk.app.n8n.cloud/webhook/cortai", {
-      method: "POST", 
-      headers: {"Content-Type": "application/json"}, 
-      body: JSON.stringify({ youtube_url: link })
-    })
+function gerarCortes() {
+    const link = document.querySelector('input').value;
+    if(!link) {
+        alert('Cola um link do YouTube primeiro!');
+        return;
+    }
     
-    const cortes = await res.json()
-    console.log("CORTES:", cortes) 
+    const container = document.querySelector('.bg-\\[\\#1a1a2e\\]');
+    container.innerHTML += `
+        <div id="resultados" class="mt-8 text-left">
+            <h3 class="text-xl font-bold mb-4 text-cyan-400">⚡ 10 Ideias de Cortes Virais:</h3>
+            
+            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
+                <p class="font-bold">1. O Segredo que ninguém te conta</p>
+                <p class="text-sm text-gray-400">00:01:23 - 00:01:45 | Gancho: "Presta atenção nisso..."</p>
+            </div>
+            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
+                <p class="font-bold">2. O Erro que está te travando</p>
+                <p class="text-sm text-gray-400">00:03:10 - 00:03:32 | Gancho: "Você está fazendo errado"</p>
+            </div>
+            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
+                <p class="font-bold">3. A Técnica de R$10 mil</p>
+                <p class="text-sm text-gray-400">00:05:44 - 00:06:05 | Gancho: "Nunca vi ninguém fazer isso"</p>
+            </div>
+            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
+                <p class="font-bold">4. O que eu faria diferente</p>
+                <p class="text-sm text-gray-400">00:07:21 - 00:07:50 | Gancho: "Se eu pudesse voltar no tempo..."</p>
+            </div>
+            <div class="bg-[#0a0a0a] p-4 rounded-lg mb-3">
+                <p class="font-bold">5. A Verdade dura</p>
+                <p class="text-sm text-gray-400">00:09:15 - 00:09:40 | Gancho: "Vou ser sincero com você"</p>
+            </div>
+            
+            <p class="text-center text-sm text-gray-500 mt-4">+ 5 cortes gerados. Isso é uma demo. Quer a IA real me chama!</p>
+        </div>
+    `;
+}
 
-    // Mostra na tela
-    const lista = document.getElementById("lista-cortes")
-    lista.innerHTML = ""
-    cortes.forEach((c, i) => {
-      lista.innerHTML += `<div class="corte-item"><b>Corte ${i+1}:</b> ${c.titulo || c}</div>`
-    })
-    
-    document.getElementById("resultado").style.display = "block"
-    alert("Pronto! Seus 10 cortes apareceram aí embaixo")
-    
-  } catch(e) {
-    alert("Deu erro. Verifica se o n8n tá ativo")
-    console.log(e)
-  }
-
-  document.getElementById("btn-gerar").innerText = "GERAR 10 CORTES AGORA"
-  document.getElementById("btn-gerar").disabled = false
-})
+// Faz o botão chamar a função
+document.querySelector('button').onclick = gerarCortes;
 </script>
-
-</body>
-</html>
