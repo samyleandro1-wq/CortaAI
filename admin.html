@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<h1> CORTA AI</h1>
+<h1>⚡ CORTA AI</h1>
 <p>Transforme vídeos longos em 10 cortes virais em 1 minuto</p>
 
 <div class="cartao">
@@ -54,7 +54,6 @@ document.getElementById("btn-gerar").addEventListener("click", async () => {
     const cortes = await res.json()
     console.log("CORTES:", cortes) 
 
-    // Mostra na tela
     const lista = document.getElementById("lista-cortes")
     lista.innerHTML = ""
     cortes.forEach((c, i) => {
